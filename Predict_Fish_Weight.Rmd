@@ -26,5 +26,55 @@ allthat <- read.csv(file="Fish.csv")
 # Perch
 ```{r}
 perch<-filter(allthat,Species=="Perch")
+perch<-select(perch,-1)
+```
+
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = perch,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+library(car)
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+  
+It appears that the best two categories to use to find the weight are height and width.  
+
+
+
+```{r}
+which.max(summary.out$adjr2)
+```
+```{r}
+summary.out$which[2,]
+```
+  
+  The summary shows that height and width are the best to use.  
+  
+# Bream
+```{r}
+Bream<-filter(allthat,Species=="Bream")
+Bream<-select(Bream,-1)
+```
+  
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Bream,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+library(car)
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
 ```
 
